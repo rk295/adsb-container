@@ -1,0 +1,51 @@
+#
+# Rename this file to .env - docker-compose (at least v1.27) will automatically 
+# load it
+#
+# Docs for main container: https://hub.docker.com/r/mikenye/readsb
+#
+# Main Web UI will be on: http://ip:8080/
+# If enabled, Flight Radar UI will be on: http://ip:8754/
+# If enabled, claim your ADSB Exchange at: http://adsbexchange.com/myip/
+#
+# IMPORTANT: Make sure you have blacklisted the required modules,
+#            listed under 'Prerequisites'
+#
+
+# Container versions
+READSB_TAG="latest"
+FR24_TAG="latest"
+ADSBX_TAG="latest"
+
+# USB Bus and Device ID. Got from 'lsusb'
+BUS="001" # FILL IN
+DEVICE="004" # FILL IN
+
+# Linux Timezone
+TZ="Europe/London"
+
+# Decimal (xx.xxxxx) Lat and Long
+LAT="" # FILL IN
+LONG="" # FILL IN
+
+# Altitude in meters (with m appended, eg '10m')
+ALT="" # FILL IN
+
+# Flight Radar 24 Key
+# Get this by running:
+#
+#   docker run --rm -it --entrypoint fr24feed mikenye/fr24feed --signup
+# 
+# Docs here: https://hub.docker.com/r/mikenye/fr24feed
+#
+FR24_KEY="" # FILL IN (if enabled)
+
+# ADSB Exchange UUID and Site name
+# Get this by running:
+#
+#    docker run --rm -it --entrypoint uuidgen mikenye/adsbexchange -t
+#
+# Docs here: https://hub.docker.com/r/mikenye/adsbexchange
+#
+ADSBX_UUID="" # FILL IN (if enabled)
+ADSBX_SITENAME="" # FILL IN (if enabled)

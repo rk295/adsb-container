@@ -1,0 +1,68 @@
+version: '2.0'
+
+networks:
+  adsbnet:
+
+services:
+  readsb:
+    image: mikenye/readsb:${READSB_TAG}
+    tty: true
+    container_name: readsb
+    restart: always
+    devices:
+      - /dev/bus/usb/${BUS}/${DEVICE}:/dev/bus/usb/${BUS}/${DEVICE}
+    ports:
+      - 8080:8080
+      - 30005:30005
+    environment:
+      - TZ=${TZ}
+    command:
+      - --dcfilter
+      - --device-type=rtlsdr
+      - --fix
+      - --json-location-accuracy=2
+      - --lat=${LAT}
+      - --lon=-${LONG}
+      - --modeac
+      - --ppm=0
+      - --net
+      - --stats-every=3600
+      - --quiet
+      - --write-json=/run/readsb
+    networks:
+      - adsbnet
+
+  fr24feed:
+    image: mikenye/fr24feed:${FR24_TAG}
+    tty: true
+    container_name: fr24feed
+    restart: always
+    ports:
+      - 8754:8754
+    environment:
+      - BEASTHOST=readsb
+      - FR24KEY=${FR24_KEY}
+      - MLAT=yes
+      - VERBOSE_LOGGING=false
+    networks:
+      - adsbnet
+    depends_on:
+      - readsb
+
+  adsbx:
+    image: mikenye/adsbexchange:${ADSBX_TAG}
+    tty: true
+    container_name: adsbx
+    restart: always
+    environment:
+      - BEASTHOST=readsb
+      - TZ=${TZ}
+      - LAT=${LAT}
+      - LONG=${LONG}
+      - ALT=${ALT}
+      - SITENAME=${ADSBX_SITENAME}
+      - UUID=${ADSBX_UUID}
+    networks:
+      - adsbnet
+    depends_on:
+      - readsb
