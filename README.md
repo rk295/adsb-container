@@ -1,5 +1,7 @@
 # ReadSB Container compose file
 
+A (very) brief list of what I did on a fresh minimal copy of Raspbian is [here](Raspbian.md).
+
 This is the `readsb` docker compose file I use on my Pi 3. I have a [FlightAware Pro Stick Plus](https://thepihut.com/products/flightaware-pro-stick-plus-usb-sdr-ads-b-receiver). Connected to a £5 aerial in the loft. This gives me about 100 NM range.
 
 ## Prerequisites
