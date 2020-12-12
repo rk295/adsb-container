@@ -16,6 +16,7 @@
 READSB_TAG="latest"
 FR24_TAG="latest"
 ADSBX_TAG="latest"
+PFINDER_TAG="latest"
 
 # USB Bus and Device ID. Got from 'lsusb'
 BUS="001" # FILL IN
@@ -49,3 +50,19 @@ FR24_KEY="" # FILL IN (if enabled)
 #
 ADSBX_UUID="" # FILL IN (if enabled)
 ADSBX_SITENAME="" # FILL IN (if enabled)
+
+# Planefinder Share Code
+# Get this by running:
+#
+# docker run \
+#    --rm \
+#    -it \
+#    --name pfclient_temp \
+#    --entrypoint pfclient \
+#    -p 30053:30053 \
+#    mikenye/planefinder
+#
+# And browse to http://localhost:30053
+#
+# Full docs here: https://github.com/mikenye/docker-planefinder
+PFINDER_SHARE_CODE="5fd526583fd71"

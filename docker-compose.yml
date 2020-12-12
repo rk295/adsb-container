@@ -66,3 +66,20 @@ services:
       - adsbnet
     depends_on:
       - readsb
+
+  pfclient:
+    image: mikenye/planefinder:${PFINDER_TAG}
+    tty: true
+    container_name: pfclient
+    restart: always
+    ports:
+      - 30053:30053
+    environment:
+      - TZ=${TZ}
+      - BEASTHOST=readsb
+      - LAT=${LAT}
+      - LONG=${LONG}
+      - SHARECODE=${PFINDER_SHARE_CODE}
+    networks:
+      - adsbnet
+
