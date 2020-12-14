@@ -83,3 +83,18 @@ services:
     networks:
       - adsbnet
 
+  tar1090:
+    image: mikenye/tar1090:${TAR_TAG}
+    tty: true
+    container_name: tar1090
+    restart: always
+    ports:
+      - 8078:80
+    environment:
+      - TZ=${TZ}
+      - BEASTHOST=readsb
+      - MLATHOST=adsbx
+      - LAT=${LAT}
+      - LONG=${LONG}
+    networks:
+      - adsbnet

@@ -17,6 +17,7 @@ READSB_TAG="latest"
 FR24_TAG="latest"
 ADSBX_TAG="latest"
 PFINDER_TAG="latest"
+TAR_TAG="latest"
 
 # USB Bus and Device ID. Got from 'lsusb'
 BUS="001" # FILL IN
