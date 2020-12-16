@@ -158,7 +158,7 @@ services:
 # Requires setup, detailed in env-template file.
 #
   piaware:
-    image: PIAWARE_NAME:${PIAWARE_TAG}
+    image: ${PIAWARE_NAME}:${PIAWARE_TAG}
     tty: true
     container_name: piaware
     restart: always
