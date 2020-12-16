@@ -4,6 +4,8 @@ A (very) brief list of what I did on a fresh minimal copy of Raspbian is [here](
 
 This is the `readsb` docker compose file I use on my Pi 3. I have a [FlightAware Pro Stick Plus](https://thepihut.com/products/flightaware-pro-stick-plus-usb-sdr-ads-b-receiver). Connected to a £5 aerial in the loft. This gives me about 100 NM range.
 
+I've tried to litter the `docker-compose.yml` and the `env-template` files with comments, most of the docs are in there.
+
 ## Prerequisites
 
 ### Docker
@@ -64,6 +66,8 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
 Look for a Realtek Semiconductor Corp entry, in this example its Bus 1 and Device 4.
 
-Optionally get yourself a Flight Radar 24 Key and a ADSB Exchange UUID - docs in the `env-template` file.
+## Other containers
 
-If you don't want to feed Flight Radar 24, comment out the container in `docker-compose.yaml`, same with ADSB Exchange.
+Optionally get yourself some keys for the other services. They are all documented in the `env-template` file.
+
+If you dont' want any other services its safe to comment out all of the rest of the `docker-compose.yaml` after the `readsb` container.

@@ -152,6 +152,7 @@ services:
     depends_on:
       - readsb
 
+#
 # piaware sends data to FlightAware (https://flightaware.com)
 # 
 # Requires setup, detailed in env-template file.
