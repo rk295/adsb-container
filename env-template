@@ -18,6 +18,15 @@ FR24_TAG="latest"
 ADSBX_TAG="latest"
 PFINDER_TAG="latest"
 TAR_TAG="latest"
+PIAWARE_TAG="latest"
+
+# Container names (safe to leave)
+READSB_NAME="mikenye/readsb"
+FR24_NAME="mikenye/fr24feed"
+ADSBX_NAME="mikenye/adsbexchange"
+PFINDER_NAME="mikenye/planefinder"
+TAR_NAME="mikenye/tar1090"
+PIAWARE_NAME="mikenye/piaware"
 
 # USB Bus and Device ID. Got from 'lsusb'
 BUS="001" # FILL IN
@@ -37,7 +46,7 @@ ALT="" # FILL IN
 # Get this by running:
 #
 #   docker run --rm -it --entrypoint fr24feed mikenye/fr24feed --signup
-# 
+#
 # Docs here: https://hub.docker.com/r/mikenye/fr24feed
 #
 FR24_KEY="" # FILL IN (if enabled)
@@ -67,3 +76,14 @@ ADSBX_SITENAME="" # FILL IN (if enabled)
 #
 # Full docs here: https://github.com/mikenye/docker-planefinder
 PFINDER_SHARE_CODE="5fd526583fd71"
+
+# Flight Aware
+# Get your ID by running:
+#
+#   docker run --rm -e LAT="51.582690" -e LONG="-0.439440" mikenye/piaware:latest | grep "my feeder ID"
+#
+# Make sure you swap out your lat and long.
+#
+# Then go to https://flightaware.com/adsb/piaware/claim to claim your feeder
+#
+FLIGHT_AWARE_ID="" # FILL IN (if enabled)

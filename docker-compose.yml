@@ -4,8 +4,17 @@ networks:
   adsbnet:
 
 services:
+
+#
+# readsb is the primary container which will poll the USB Radio and display a
+# simple UI on http://localhost:8080/.
+# 
+# It can optionally pull MLAT information from other containers, controlled by
+# the `PULLMLAT` environment variable before. Either comment it out or adjust
+# the value with the containers and ports you are running
+#
   readsb:
-    image: mikenye/readsb:${READSB_TAG}
+    image: ${READSB_NAME}:${READSB_TAG}
     tty: true
     container_name: readsb
     restart: always
@@ -16,6 +25,7 @@ services:
       - 30005:30005
     environment:
       - TZ=${TZ}
+      - PULLMLAT=piaware:30105,adsbx:30105 # comment this out if you don't run piaware and/or adsbx
     command:
       - --dcfilter
       - --device-type=rtlsdr
@@ -24,16 +34,55 @@ services:
       - --lat=${LAT}
       - --lon=-${LONG}
       - --modeac
-      - --ppm=0
       - --net
-      - --stats-every=3600
+      - --ppm=0
       - --quiet
+      - --stats-every=3600
       - --write-json=/run/readsb
     networks:
       - adsbnet
 
+
+#
+# tar1090 is an optional extra UI (served on http://localhost:8078) for details
+# see the Git repo here https://github.com/wiedehopf/tar1090.
+#
+# It can optionally pull MLAT information from the adsbexchange container, if
+# you choose not to run that then comment out the `MLATHOST` environment
+# variable below
+#
+  tar1090:
+    image: ${TAR_NAME}:${TAR_TAG}
+    tty: true
+    container_name: tar1090
+    restart: always
+    ports:
+      - 8078:80
+    environment:
+      - BEASTHOST=readsb
+      - LAT=${LAT}
+      - LONG=${LONG}
+      - MLATHOST=adsbx # comment this out if you don't run adsbx for MLAT
+      - TZ=${TZ}
+    networks:
+      - adsbnet
+    depends_on:
+      - readsb
+
+################################################################################
+# All the containers below are to send data to various third party services.   #
+# If you are happy with just the `readsb` UI then you can safely comment out   #
+# the entire file from this point onwards.                                     #
+################################################################################
+
+#
+# fr24feed feeds data to FlightRadar 24 - worth doing because they'll give you
+# a Business level account for free if you do. 
+#
+# Requires setup, detailed in env-template file.
+#
   fr24feed:
-    image: mikenye/fr24feed:${FR24_TAG}
+    image: ${FR24_NAME}:${FR24_TAG}
     tty: true
     container_name: fr24feed
     restart: always
@@ -49,52 +98,78 @@ services:
     depends_on:
       - readsb
 
+#
+# adsbx sends data to the adsbexchange, a good, free and unfiltered adsb web 
+# site - https://www.adsbexchange.com. Also has the advantage of being able
+# to serve MLAT information to other containers.
+# 
+# Requires setup, detailed in env-template file.
+#
   adsbx:
-    image: mikenye/adsbexchange:${ADSBX_TAG}
+    image: ${ADSBX_NAME}:${ADSBX_TAG}
     tty: true
     container_name: adsbx
     restart: always
     environment:
+      - ALT=${ALT}
       - BEASTHOST=readsb
-      - TZ=${TZ}
       - LAT=${LAT}
       - LONG=${LONG}
-      - ALT=${ALT}
       - SITENAME=${ADSBX_SITENAME}
+      - TZ=${TZ}
       - UUID=${ADSBX_UUID}
     networks:
       - adsbnet
     depends_on:
       - readsb
-
+#
+# pfclient sends data to Planefinder (https://planefinder.net). Also serves
+# a nice GUI with some interesting information about your receiver range. Web
+# interface is on port 300053.
+# 
+# Requires setup, detailed in env-template file.
+#
   pfclient:
-    image: mikenye/planefinder:${PFINDER_TAG}
+    image: ${PFINDER_NAME}:${PFINDER_TAG}
     tty: true
     container_name: pfclient
     restart: always
     ports:
       - 30053:30053
     environment:
-      - TZ=${TZ}
       - BEASTHOST=readsb
       - LAT=${LAT}
       - LONG=${LONG}
       - SHARECODE=${PFINDER_SHARE_CODE}
+      - TZ=${TZ}
     networks:
       - adsbnet
+    depends_on:
+      - readsb
 
-  tar1090:
-    image: mikenye/tar1090:${TAR_TAG}
+# piaware sends data to FlightAware (https://flightaware.com)
+# 
+# Requires setup, detailed in env-template file.
+#
+  piaware:
+    image: PIAWARE_NAME:${PIAWARE_TAG}
     tty: true
-    container_name: tar1090
+    container_name: piaware
     restart: always
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
     ports:
-      - 8078:80
+      - 8081:80
     environment:
-      - TZ=${TZ}
+      - ALLOW_MLAT=yes
       - BEASTHOST=readsb
-      - MLATHOST=adsbx
+      - FEEDER_ID=$FLIGHT_AWARE_ID
       - LAT=${LAT}
       - LONG=${LONG}
+      - MLAT_RESULTS=yes
+      - RECEIVER_TYPE=relay
+      - TZ=${TZ}
     networks:
       - adsbnet
+    depends_on:
+      - readsb
