@@ -3,6 +3,10 @@ version: '2.0'
 networks:
   adsbnet:
 
+volumes:
+  readsbpb_rrd:
+  readsbpb_autogain:
+
 services:
 
 #
@@ -14,33 +18,34 @@ services:
 # the value with the containers and ports you are running
 #
   readsb:
-    image: ${READSB_NAME}:${READSB_TAG}
+    image: ${READSB_PROTO_NAME}:${READSB_PROTO_TAG}
     tty: true
     container_name: readsb
+    hostname: readsb
     restart: always
     devices:
       - /dev/bus/usb/${BUS}/${DEVICE}:/dev/bus/usb/${BUS}/${DEVICE}
     ports:
       - 8080:8080
       - 30005:30005
-    environment:
-      - TZ=${TZ}
-      - PULLMLAT=piaware:30105,adsbx:30105 # comment this out if you don't run piaware and/or adsbx
-    command:
-      - --dcfilter
-      - --device-type=rtlsdr
-      - --fix
-      - --json-location-accuracy=2
-      - --lat=${LAT}
-      - --lon=-${LONG}
-      - --modeac
-      - --net
-      - --ppm=0
-      - --quiet
-      - --stats-every=3600
-      - --write-json=/run/readsb
     networks:
       - adsbnet
+    environment:
+      - TZ=${TZ}
+      - READSB_DCFILTER=true
+      - READSB_DEVICE_TYPE=rtlsdr
+      - READSB_FIX=true
+      - READSB_GAIN=autogain
+      - READSB_LAT=${LAT}
+      - READSB_LON=${LONG}
+      - READSB_MODEAC=true
+      - READSB_RX_LOCATION_ACCURACY=2
+      - READSB_STATS_RANGE=true
+      - READSB_NET_ENABLE=true
+      - READSB_NET_CONNECTOR=piaware,30105,beast_in;adsbx,30105,beast_in  # comment this out if you don't run piaware and/or adsbx
+    volumes:
+      - readsbpb_rrd:/run/collectd
+      - readsbpb_autogain:/run/autogain
 
 
 #

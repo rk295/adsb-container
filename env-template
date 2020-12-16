@@ -13,7 +13,7 @@
 #
 
 # Container versions
-READSB_TAG="latest"
+READSB_PROTO_TAG="latest"
 FR24_TAG="latest"
 ADSBX_TAG="latest"
 PFINDER_TAG="latest"
@@ -21,7 +21,7 @@ TAR_TAG="latest"
 PIAWARE_TAG="latest"
 
 # Container names (safe to leave)
-READSB_NAME="mikenye/readsb"
+READSB_PROTO_NAME="mikenye/readsb-protobuf"
 FR24_NAME="mikenye/fr24feed"
 ADSBX_NAME="mikenye/adsbexchange"
 PFINDER_NAME="mikenye/planefinder"
