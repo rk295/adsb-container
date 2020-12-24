@@ -71,3 +71,61 @@ Look for a Realtek Semiconductor Corp entry, in this example its Bus 1 and Devic
 Optionally get yourself some keys for the other services. They are all documented in the `env-template` file.
 
 If you dont' want any other services its safe to comment out all of the rest of the `docker-compose.yaml` after the `readsb` container.
+
+## 360 Radar
+
+Mike, who built all the other containers used here used to provide a container for 360 Radar, however the owners of the site have requested he removes it from Docker Hub. Because of this you need to provide your own. He has however left the Git repo up for you to clone [here](https://github.com/mikenye/docker-360radar).
+
+To build this do something like the following:
+
+```
+% git clone https://github.com/mikenye/docker-360radar.git
+% cd docker-360radar
+% docker build -t 360radar:latest .
+```
+
+The two `THREE_SIXTY_NAME` and `THREE_SIXTY_TAG` variables in the `env-template` should already be  set to `360radar` and `latest`, but it is worth a check.
+
+Next jump to the bottom of the `docker-compose.yml` file and remove the comment characters from the 360 Radar container.
+
+```
+% docker-compose up -d 360radar
+```
+
+Will bring it up, run `docker-compose logs -f 360radar` to tail the logs and check it is working. Sample output should look like this:
+
+```
+360radar    | [s6-init] making user provided files available at /var/run/s6/etc...exited 0.
+360radar    | [s6-init] ensuring user provided files have correct perms...exited 0.
+360radar    | [fix-attrs.d] applying ownership & permissions fixes...
+360radar    | [fix-attrs.d] done.
+360radar    | [cont-init.d] executing container initialization scripts...
+360radar    | [cont-init.d] 01-sanitycheck: executing... 
+360radar    | [cont-init.d] 01-sanitycheck: exited 0.
+360radar    | [cont-init.d] done.
+360radar    | [services.d] starting services
+360radar    | [services.d] done.
+360radar    | [mlat-client] Wed Dec 23 18:46:05 2020 mlat-client 0.2.11 starting up
+360radar    | [mlat-client] Wed Dec 23 18:46:05 2020 Connected to multilateration server at test.mlat-server.co.uk:41111, handshaking
+360radar    | [mlat-client] Wed Dec 23 18:46:05 2020 Server says: 
+360radar    | [mlat-client] 
+360radar    | [mlat-client]         In-development v2 server. Expect odd behaviour.
+360radar    | [mlat-client] 
+360radar    | [mlat-client]         The multilateration server source code is available under
+360radar    | [mlat-client]         the terms of the Affero GPL (v3 or later). You may obtain
+360radar    | [mlat-client]         a copy of this server's source code at the following
+360radar    | [mlat-client]         location: https://github.com/mutability/mlat-server
+360radar    | [mlat-client]         
+360radar    | [mlat-client] Wed Dec 23 18:46:06 2020 Handshake complete.
+360radar    | [mlat-client] Wed Dec 23 18:46:06 2020   Compression:       zlib2
+360radar    | [mlat-client] Wed Dec 23 18:46:06 2020   UDP transport:     test.mlat-server.co.uk:41111
+360radar    | [mlat-client] Wed Dec 23 18:46:06 2020   Split sync:        disabled
+360radar    | [mlat-client] Wed Dec 23 18:46:06 2020 Input connected to readsb:30005
+360radar    | [mlat-client] Wed Dec 23 18:46:06 2020 Input format changed to BEAST, 12MHz clock
+360radar    | [mlat-client] Wed Dec 23 19:01:05 2020 Receiver status: connected
+360radar    | [mlat-client] Wed Dec 23 19:01:05 2020 Server status:   ready
+```
+
+Once that is done, use the contact form [here](https://radar.lowflyingwales.co.uk/contact-us/) to drop them a line and tell them your site name.
+
+

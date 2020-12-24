@@ -19,6 +19,7 @@ ADSBX_TAG="latest"
 PFINDER_TAG="latest"
 TAR_TAG="latest"
 PIAWARE_TAG="latest"
+THREE_SIXTY_TAG="latest" # See 360 radar section in the README.md
 
 # Container names (safe to leave)
 READSB_PROTO_NAME="mikenye/readsb-protobuf"
@@ -27,6 +28,7 @@ ADSBX_NAME="mikenye/adsbexchange"
 PFINDER_NAME="mikenye/planefinder"
 TAR_NAME="mikenye/tar1090"
 PIAWARE_NAME="mikenye/piaware"
+THREE_SIXTY_NAME="360radar" # See 360 radar section in the README.md
 
 # USB Bus and Device ID. Got from 'lsusb'
 BUS="001" # FILL IN
@@ -87,3 +89,22 @@ PFINDER_SHARE_CODE="5fd526583fd71"
 # Then go to https://flightaware.com/adsb/piaware/claim to claim your feeder
 #
 FLIGHT_AWARE_ID="" # FILL IN (if enabled)
+
+# Radar 360
+#
+# CAUTION: You need to build this container yourself, see the section in the README.md
+#
+# Region should be one of:
+# * eire
+# * midlands
+# * northern_england
+# * northern_ireland
+# * scotland
+# * se_england
+# * sw_england
+# * wales
+#
+# SITENAME should be thenname of your village or town plus your initials in '
+# capitals – NO spaces!
+THREE_SIXTY_SITENAME="" # FILL in (if enabled)
+THREE_SIXTY_REGION="" # FILL in (if enabled)

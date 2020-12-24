@@ -179,3 +179,27 @@ services:
       - adsbnet
     depends_on:
       - readsb
+
+#
+# 360 Radar (https://360radar.co.uk)
+# 
+# Commented out because it requires you to build the container yourself! More
+# details in the README.md file in this directory
+#
+  # 360radar:
+  #   image: ${THREE_SIXTY_NAME}:${THREE_SIXTY_TAG}
+  #   tty: true
+  #   container_name: 360radar
+  #   restart: always
+  #   environment:
+  #     - BEASTHOST=readsb
+  #     - TZ=${TZ}
+  #     - LAT=${LAT}
+  #     - LONG=${LONG}
+  #     - ALT=${ALT}
+  #     - SITENAME=${THREE_SIXTY_SITENAME}
+  #     - REGION=${THREE_SIXTY_REGION}
+  #   networks:
+  #     - adsbnet
+  #   depends_on:
+  #     - readsb
